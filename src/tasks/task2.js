@@ -1,6 +1,6 @@
 import fs from 'fs';
 import csv from 'csvtojson';
-import * as logger from '../../services/logger';
+import { ErrorLogger } from '../../services/logger';
 
 const _filePath = './scv/node_mentoring_t1_2_input_example.csv';
 const _reader = fs.createReadStream(_filePath);
@@ -14,7 +14,7 @@ const _convertoToJson = chunk => {
 
 const _slicedData = data => data.slice(1, data.length);
 
-export class Task2 extends logger.ErrorLogger {
+export class Task2 extends ErrorLogger {
 
   constructor() {
     super();
@@ -50,10 +50,7 @@ export class Task2 extends logger.ErrorLogger {
 
   write(data) {
     try {
-      if (!data.length) {
-        _writer.end();
-        return;
-      }
+      if (!data.length) return;
 
       const isWritable = _writer.write(`${JSON.stringify(data[0])}\n`);
 
@@ -62,6 +59,7 @@ export class Task2 extends logger.ErrorLogger {
       } else {
         _writer.once('drain', () => {
           this.write(_slicedData(data));
+          if (!_writer.listenerCount('drain')) _writer.end();
         });
       }
 
