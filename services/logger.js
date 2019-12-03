@@ -16,6 +16,10 @@ export class ErrorLogger extends EventEmitter {
   }
 
   subscribe(eventName) {
-    this.on(eventName, _logHandler);
+    if (this.listenerCount() < this.getMaxListeners()) {
+      this.on(eventName, _logHandler);
+      return;
+    }
+    console.warn('EXCEEDED MAXIMUM LISTENER COUNT');
   }
 }
