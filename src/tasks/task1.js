@@ -1,10 +1,6 @@
-let _chunk;
-const _reverse = str => {
-  return str.split('').reverse((a, b) => {
-    if (a > b) return 0;
-    if (a < b) return -1;
-  }).join(',').replace(/,/g, '')
-}
+let chunk;
+
+const reverse = str => str.split('').reverse().join('');
 
 export class Task1 {
 
@@ -15,14 +11,9 @@ export class Task1 {
   init() {
     process.stdin.setEncoding('utf8');
     process.stdin.on('readable', () => {
-      while ((_chunk = process.stdin.read()) !== null) {
-        process.stdout.write(`Chunk data is: ${_reverse(_chunk)}`);
+      while ((chunk = process.stdin.read()) !== null) {
+        process.stdout.write(`Chunk data is: ${reverse(chunk)}\n`);
       }
-    });
-
-    process.stdin.on('end', () => {
-      process.stdout.write('END');
-      _chunk = null;
     });
   }
 }
