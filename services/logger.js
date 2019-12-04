@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-const _logHandler = (e) => {
+const logHandler = (e) => {
   if (e instanceof Error) {
     console.log(`======== Error has occurred ======== \ncode - ${e.code} \nmessage - ${e.message} \n====================================`);
   }
@@ -17,7 +17,7 @@ export class ErrorLogger extends EventEmitter {
 
   subscribe(eventName) {
     if (this.listenerCount() < this.getMaxListeners()) {
-      this.on(eventName, _logHandler);
+      this.on(eventName, logHandler);
       return;
     }
     console.warn('EXCEEDED MAXIMUM LISTENER COUNT');
