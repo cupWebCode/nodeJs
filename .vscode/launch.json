@@ -7,6 +7,20 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "TS Debugger",
+      "program": "${workspaceFolder}/src/app.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
+      "args": [
+        "Task_2_1"
+      ],
+      "trace": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "protocol": "inspector",
       "name": "ES6 Debugger",
       "program": "${workspaceFolder}/src/index.js",
