@@ -1,20 +1,21 @@
-import express from 'express';
-import { DependencyInjector } from './dependencyInjector';
-import { Container as di } from 'typedi';
-import { Logger } from './logger';
+import { Application } from "express";
+import { DependencyInjector } from "./dependency-injector";
+import { Container } from "typedi";
+import { Logger } from "./logger";
+import { ExpressLoader } from "./express.loader";
 
 export class Loaders {
-  private logger: Logger = di.get(Logger);
+  private logger: Logger = Container.get(Logger);
 
-  constructor(public expressApp: express.Application) {
-    this.init();
-  }
+  constructor(private expressApp: Application) {}
 
   init() {
     try {
-      new DependencyInjector();
+      new DependencyInjector(this.expressApp);
+      new ExpressLoader(this.expressApp);
+      this.logger.info("LOADERS - HAVE BEEN INITIALIZED.");
     } catch (e) {
-      this.logger.instance.error(e);
+      this.logger.error(e);
       throw e;
     }
   }
