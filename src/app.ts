@@ -17,6 +17,7 @@ class Server {
   init() {
     try {
       new Loaders(this.app).init();
+      this.app.disable("x-powered-by");
       this.app.listen(environment.port, err => {
         if (err) {
           this.logger.error(err);

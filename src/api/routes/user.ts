@@ -1,77 +1,97 @@
 import "reflect-metadata";
-import { Router, Request, Response } from "express";
+import express, { Router, Request, Response, NextFunction } from "express";
 import Container from "typedi";
-import { UserService } from "../../services/user.service";
-import {
-  userValidator,
-  userBodySchema,
-  UserBodySchema
-} from "../validators/user.validator";
-import { ExpressJoiInstance, ValidatedRequest } from "express-joi-validation";
+import { UserValidatorService } from "../validators/user.validator";
 
+import { UserService } from "../../services/user.service";
 import { IdGeneratorService } from "../../services/id-generator.service";
 
 export class UserRoutes {
-  private route = Router();
+  private router = Router();
 
   private userService = Container.get(UserService);
   private generateId = Container.get(IdGeneratorService).generateId;
-
-  private userValidator: ExpressJoiInstance = userValidator;
-  private userBodySchema = userBodySchema;
+  private validator = Container.get(UserValidatorService);
 
   constructor(private app: Router) {
     this.init();
   }
 
   private init(): void {
-    this.app.use("/user", this.route);
+    this.app.use("/user", this.router);
 
-    this.route.post(
+    this.router.post(
       "/",
       this.generateId,
-      this.userValidator.body(this.userBodySchema),
-      (req: ValidatedRequest<UserBodySchema>, res: Response) => {
-        this.userService.createUser(req.body);
-        return res.json({ user: "Created" });
-      }
-    );
-
-    this.route.get("/list", (req: Request, res: Response, next) => {
-      // GET get all users
-      const usersList = this.userService.getAllUsers();
-
-      return res
-        .json({ user: `Show list of all users` })
-        .status(200)
-        .end(); // TODO
-    });
-
-    this.route.get("/", (req: Request, res: Response) => {
-      console.log("Request Id:", req.params);
-
-      const userId = req.headers.id as string;
-      const userData = this.userService.getUser(userId);
-
-      return res
-        .json({ user: userData })
-        .status(200)
-        .end(); // TODO
-    });
-
-    this.route.put(
-      "/edit",
-      this.userValidator.body(this.userBodySchema),
+      this.validator.checkCreateUser,
       (req: Request, res: Response) => {
-        this.userService.updateUser(req.body);
-        return res.json({ user: "Has updated" }).status(200); // TODO
+        this.userService.createUser(req.body);
+        res
+          .json({ message: `User ${req.body.login} was created successfully.` })
+          .status(200);
       }
     );
 
-    this.route.delete("/delete", (req: Request, res: Response) => {
-      const userId = req.headers.id as string;
-      this.userService.deleteUser(userId);
-      return res.json({ user: "Has deleted" }).status(200); // TODO
-    });
+    this.router.get(
+      "/list",
+      this.validator.checkGetUserList,
+      (req: Request, res: Response, next: NextFunction) => {
+        const usersList = this.userService.getSortedUserList(req.headers);
+        if (usersList.length) {
+          res.json({ userList: usersList }).status(200);
+          return;
+        }
+        res.json({ message: "Users weren't found." }).status(200);
+      }
+    );
+
+    this.router.get(
+      "/",
+      this.validator.checkGetUser,
+      (req: Request, res: Response) => {
+        const userData = this.userService.getUser(req.headers.id as string);
+
+        if (userData) {
+          res.json({ user: userData }).status(200);
+          return;
+        }
+        res
+          .status(204)
+          .json({ message: "User with specified ID was't found." });
+      }
+    );
+
+    this.router.put(
+      "/edit",
+      this.validator.checkCreateUser,
+      (req: Request, res: Response) => {
+        if (this.userService.updateUser(req.body)) {
+          res
+            .json({ message: "User data was updated successfully." })
+            .status(200);
+          return;
+        }
+        res
+          .status(204)
+          .json({ message: "User with specified ID was't found." });
+      }
+    );
+
+    this.router.delete(
+      "/delete",
+      this.validator.checkGetUser,
+      (req: Request, res: Response) => {
+        const isUserDeleted = this.userService.deleteUser(
+          req.headers.id as string
+        );
+        if (isUserDeleted) {
+          res.json({ user: "User was successfully deleted" }).status(200);
+          return;
+        }
+        res
+          .status(204)
+          .json({ message: "User with specified ID was't found." });
+      }
+    );
   }
 }
