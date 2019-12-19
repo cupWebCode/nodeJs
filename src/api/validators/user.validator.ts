@@ -18,7 +18,6 @@ const validationVariants = {
 
 const sortValidation = {
   limit: Joi.number(),
-  sort: Joi.string(),
   loginSubstring: Joi.string()
 };
 
@@ -69,7 +68,7 @@ export class UserValidatorService {
   }
 
   checkGetUserList(req: Request, res: Response, next: NextFunction): void {
-    const itemsSchema = ["limit", "sort", "loginSubstring"];
+    const itemsSchema = ["limit", "loginSubstring"];
     const schema = createSchema(itemsSchema, sortValidation).options({
       allowUnknown: true
     });
