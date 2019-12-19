@@ -1,5 +1,4 @@
 import { Application } from "express";
-import { DependencyInjector } from "./dependency-injector";
 import { Container } from "typedi";
 import { Logger } from "./logger";
 import { ExpressLoader } from "./express.loader";
@@ -11,7 +10,6 @@ export class Loaders {
 
   init() {
     try {
-      new DependencyInjector(this.expressApp);
       new ExpressLoader(this.expressApp);
       this.logger.info("LOADERS - HAVE BEEN INITIALIZED.");
     } catch (e) {

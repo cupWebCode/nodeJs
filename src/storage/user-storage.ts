@@ -18,22 +18,33 @@ export class UserStorage {
     });
   }
 
-  updateUser(user: User): void {
+  updateUser(user: User): boolean {
+    let success = false;
     this.userCollection.forEach(item => {
       if (item.id === user.id) {
         item.data = {
           ...user
         };
+        success = true;
       }
     });
+    return success;
   }
 
-  deleteUser(id: string): void {
-    this.userCollection.forEach(item => (item.data.isDeleted = item.id === id));
+  deleteUser(id: string): boolean {
+    let success = false;
+    this.userCollection.forEach(item => {
+      success = item.data.isDeleted = item.id === id;
+    });
+    return success;
   }
 
-  getUser(id: string): User {
+  getUser(id?: string): User {
     const user = this.userCollection.find(item => item.id === id);
     return user ? user.data : null;
+  }
+
+  getUsers(): User[] {
+    return this.userCollection.map(item => item.data);
   }
 }
