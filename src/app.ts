@@ -1,7 +1,5 @@
 import express, { Application } from "express";
-
 import { Container } from "typedi";
-
 import { environment } from "./config/environment";
 import { Loaders } from "./loaders";
 import { Logger } from "./loaders/logger";
