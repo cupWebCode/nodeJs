@@ -54,6 +54,7 @@ export class UserValidatorService {
   checkGetUser(req: Request, res: Response, next: NextFunction): void {
     const itemsSchema = ["id"];
     const schema = createSchema(itemsSchema, validationVariants).options({
+      abortEarly: false,
       allowUnknown: true
     });
     const { error } = Joi.validate(req.headers, schema);
@@ -70,6 +71,7 @@ export class UserValidatorService {
   checkGetUserList(req: Request, res: Response, next: NextFunction): void {
     const itemsSchema = ["limit", "loginSubstring"];
     const schema = createSchema(itemsSchema, sortValidation).options({
+      abortEarly: false,
       allowUnknown: true
     });
     const { error } = Joi.validate(req.headers, schema);
