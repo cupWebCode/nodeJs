@@ -36,16 +36,26 @@ const createSchema = (
   return schema;
 };
 
+const errorResponse = (schemaErrors): any => {
+  const errors = schemaErrors.map(error => {
+    let { path, message } = error;
+    return { path, message } = error;
+  });
+  return {
+    status: 'failed',
+    errors
+  }
+}
+
 @Service()
 export class UserValidatorService {
   checkCreateUser(req: Request, res: Response, next: NextFunction): void {
     const itemsSchema = ["id", "login", "password", "age", "isDeleted"];
     const schema = createSchema(itemsSchema, validationVariants);
-    const { value, error } = Joi.validate(req.body, schema);
-    if (error) {
-      res.status(400).json({
-        message: `Invalid request ${error.message}`
-      });
+
+    const { error } = Joi.validate(req.body, schema);
+    if (error && error.isJoi) {
+      res.status(400).json(errorResponse(error.details));
     } else {
       next();
     }
@@ -59,10 +69,8 @@ export class UserValidatorService {
     });
     const { error } = Joi.validate(req.headers, schema);
 
-    if (error) {
-      res.status(400).json({
-        message: `Invalid request ${error.message}`
-      });
+    if (error && error.isJoi) {
+      res.status(400).json(errorResponse(error.details));
     } else {
       next();
     }
@@ -76,10 +84,8 @@ export class UserValidatorService {
     });
     const { error } = Joi.validate(req.headers, schema);
 
-    if (error) {
-      res.status(400).json({
-        message: `Invalid request ${error.message}`
-      });
+    if (error && error.isJoi) {
+      res.status(400).json(errorResponse(error.details));
     } else {
       next();
     }
