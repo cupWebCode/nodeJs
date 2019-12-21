@@ -27,9 +27,9 @@ export class ExpressLoader {
       this.expressApp.use(environment.api.prefix, new Routes().app);
 
       this.expressApp.use((req, res, next) => {
-        const err = new Error("Not Found");
-        err["status"] = 404;
-        next(err);
+        res
+          .status(404)
+          .send({ message: `Route ${req.url} Not found.` });
       });
 
       this.logger.info("EXPRESS LOADER - HAS BEEN INITIALIZED.");

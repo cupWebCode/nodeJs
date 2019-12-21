@@ -20,7 +20,6 @@ class Server {
         if (err) {
           this.logger.error(err);
           process.exit(1);
-          return;
         }
 
         this.logger.info(
