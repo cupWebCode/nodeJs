@@ -38,8 +38,7 @@ export class UserRoutes {
       (req: Request, res: Response, next: NextFunction) => {
         const usersList = this.userService.getSortedUserList(req.headers);
         if (usersList.length) {
-          res.json({ userList: usersList }).status(200);
-          return;
+          return res.json({ userList: usersList }).status(200);
         }
         res.json({ message: "Users weren't found." }).status(200);
       }
@@ -52,8 +51,7 @@ export class UserRoutes {
         const userData = this.userService.getUser(req.headers.id as string);
 
         if (userData) {
-          res.json({ user: userData }).status(200);
-          return;
+          return res.json({ user: userData }).status(200);
         }
         res
           .status(204)
@@ -66,10 +64,9 @@ export class UserRoutes {
       this.validator.checkCreateUser,
       (req: Request, res: Response) => {
         if (this.userService.updateUser(req.body)) {
-          res
+          return res
             .json({ message: "User data was updated successfully." })
             .status(200);
-          return;
         }
         res
           .status(204)
