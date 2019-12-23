@@ -1,0 +1,113 @@
+{
+	"variables": [],
+	"info": {
+		"name": "User requests",
+		"_postman_id": "e3303777-7da8-7cb8-3f48-c64981797e4f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get user by ID",
+			"request": {
+				"url": "http://localhost:3000/api/user",
+				"method": "GET",
+				"header": [
+					{
+						"key": "id",
+						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get auto-sugges list",
+			"request": {
+				"url": "http://localhost:3000/api/user/list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "limit",
+						"value": "2",
+						"description": "",
+						"disabled": true
+					},
+					{
+						"key": "loginsubstring",
+						"value": "As",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"request": {
+				"url": "http://localhost:3000/api/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"A123456s\",\n\t\"password\": \"ASDFaasd234\",\n\t\"age\": \"30\",\n\t\"isDeleted\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Edit user by ID",
+			"request": {
+				"url": "http://localhost:3000/api/user/edit",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "id",
+						"value": "",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"0c827280-256d-11ea-ad65-931e49e25301\",\n\t\"login\": \"TESTER Ivan\",\n\t\"password\": \"ASDFaasd234\",\n\t\"age\": \"25\",\n\t\"isDeleted\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user by ID",
+			"request": {
+				"url": "http://localhost:3000/api/user/delete",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "id",
+						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
