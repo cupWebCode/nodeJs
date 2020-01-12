@@ -7,5 +7,12 @@ export const environment = {
   },
   logs: {
     level: process.env.LOG_LEVEL || "silly"
+  },
+  pg: {
+    user: 'postgres',
+    host: 'localhost',//PostgreSQL 12 //http://127.0.0.1:54826/browser/
+    database: 'nodeJs',//'api',
+    password: 'superuser',
+    port: 5432,
   }
 };
