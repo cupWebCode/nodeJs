@@ -25,10 +25,13 @@ export class UserRoutes {
       this.generateId,
       this.validator.checkCreateUser,
       (req: Request, res: Response) => {
-        this.userService.createUser(req.body);
-        res
-          .json({ message: `User ${req.body.login} was created successfully.` })
-          .status(200);
+        this.userService.createUser(req.body)
+          .then(() => {
+            res
+              .json({ message: `User ${req.body.login} was created successfully.` })
+              .status(200);
+          })
+          .catch(e => console.error(e.stack));
       }
     );
 
@@ -36,11 +39,16 @@ export class UserRoutes {
       "/list",
       this.validator.checkGetUserList,
       (req: Request, res: Response, next: NextFunction) => {
-        const usersList = this.userService.getSortedUserList(req.headers);
-        if (usersList.length) {
-          return res.json({ userList: usersList }).status(200);
-        }
-        res.json({ message: "Users weren't found." }).status(200);
+
+        this.userService.getSortedUserList(req.headers)
+          .then(data => {
+            if (data.length) {
+              return res.json({ userList: data }).status(200);
+            }
+
+            res.json({ message: "Users weren't found." }).status(200);
+          })
+          .catch(e => console.error(e.stack));
       }
     );
 
@@ -48,14 +56,17 @@ export class UserRoutes {
       "/",
       this.validator.checkGetUser,
       (req: Request, res: Response) => {
-        const userData = this.userService.getUser(req.headers.id as string);
-
-        if (userData) {
-          return res.json({ user: userData }).status(200);
-        }
-        res
-          .status(204)
-          .json({ message: "User with specified ID was't found." });
+        this.userService.getUser(req.headers.id as string)
+          .then(data => {
+            if (data.rowCount) {
+              const user = data.rows[0];
+              return res.json({ user }).status(200);
+            }
+            res
+              .status(204)
+              .json({ message: "User with specified ID was't found." });
+          })
+          .catch(e => console.error(e.stack));
       }
     );
 
@@ -63,14 +74,19 @@ export class UserRoutes {
       "/edit",
       this.validator.checkCreateUser,
       (req: Request, res: Response) => {
-        if (this.userService.updateUser(req.body)) {
-          return res
-            .json({ message: "User data was updated successfully." })
-            .status(200);
-        }
-        res
-          .status(204)
-          .json({ message: "User with specified ID was't found." });
+
+        this.userService.updateUser(req.body)
+          .then((status: boolean) => {
+            if (status) {
+              return res
+                .json({ message: "User data was updated successfully." })
+                .status(200);
+            }
+            res
+              .status(204)
+              .json({ message: "User with specified ID was't found." });
+          })
+          .catch(e => console.error(e.stack));
       }
     );
 
@@ -78,16 +94,17 @@ export class UserRoutes {
       "/delete",
       this.validator.checkGetUser,
       (req: Request, res: Response) => {
-        const isUserDeleted = this.userService.deleteUser(
-          req.headers.id as string
-        );
-        if (isUserDeleted) {
-          res.json({ user: "User was successfully deleted" }).status(200);
-          return;
-        }
-        res
-          .status(204)
-          .json({ message: "User with specified ID was't found." });
+
+        this.userService.deleteUser(req.headers.id as string)
+          .then((status: boolean) => {
+            if (status) {
+              return res.json({ user: "User was successfully deleted" }).status(200);
+            }
+            res
+              .status(204)
+              .json({ message: "User with specified ID was't found." });
+          })
+          .catch(e => console.error(e.stack));
       }
     );
   }

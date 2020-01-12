@@ -14,13 +14,6 @@ export class ExpressLoader {
 
   private init() {
     try {
-      this.expressApp.get("/status", (req, res) => {
-        res.json({ user: "Status is here" }).status(200);
-      });
-
-      this.expressApp.head("/status", (req, res) => {
-        res.status(200).end();
-      });
 
       this.expressApp.use(bodyParser.json());
 

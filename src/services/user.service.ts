@@ -1,62 +1,71 @@
 import { Inject, Service } from "typedi";
 import "reflect-metadata";
+import { IncomingHttpHeaders } from "http";
+import { QueryResult } from "pg";
 
 import { Logger } from "../loaders/logger";
-import { UserStorage } from "../storage/user-storage";
 import { UserModel } from "../models/user";
 import { User } from "../interfaces/user";
-import { IncomingHttpHeaders } from "http";
+import { PgService } from "./pg.service";
+import * as queries from "../quieres/user.queries";
 
 @Service()
 export class UserService {
-  @Inject() private userStorage: UserStorage;
   @Inject() private logger: Logger;
+  @Inject() private pg: PgService;
 
   private userFilteredList: User[];
   private defaultUserLimit = 10;
 
-  constructor() {}
+  constructor() { }
 
-  getUser(userId: string): User {
+  async createUser(userInfo: User): Promise<QueryResult<any>> {
     try {
-      return this.userStorage.getUser(userId);
+      const user = new UserModel(userInfo);//TODO
+      return await this.pg.pool.query<User, any[]>(queries.createUser, [user.id, user.login, user.password, user.age, user.isDeleted]);
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
   }
 
-  getSortedUserList(req: IncomingHttpHeaders): User[] {
+  async getUser(userId: string): Promise<QueryResult<User>> {
+    try {
+      return await this.pg.pool.query<User>(queries.getUser, [userId]);
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+
+  async getSortedUserList(req: IncomingHttpHeaders): Promise<User[]> {
     this.userFilteredList = [];
-    const userList: User[] = this.userStorage.getUsers();
+    return await this.pg.pool.query<User>(queries.getUserList)
+      .then(data => {
+        const result = this.filterBySubstring(data.rows, req.loginsubstring as string)
+          .userLimit(+req.limit || this.defaultUserLimit)
+          .sort(this.dynamicSort("login"));
 
-    return this.filterBySubstring(userList, req.loginsubstring as string)
-      .userLimit(+req.limit || this.defaultUserLimit)
-      .sort(this.dynamicSort("login"));
+        return Promise.resolve(result);
+      });
   }
 
-  updateUser(user: User): boolean {
+  async updateUser(user: User): Promise<boolean> {
     try {
-      return this.userStorage.updateUser(user);
+      const query = queries.editUser(user);
+      return await this.pg.pool.query<User>(query)
+        .then(() => Promise.resolve(true));
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
   }
 
-  deleteUser(id: string): boolean {
+  async deleteUser(id: string): Promise<boolean> {
     try {
-      return this.userStorage.deleteUser(id);
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
-    }
-  }
-
-  createUser(userInfo: User): void {
-    try {
-      const user = new UserModel(userInfo);
-      this.userStorage.addUser(user);
+      const query = queries.markUserAsDelete(id);
+      return await this.pg.pool.query<User>(query)
+        .then(() => Promise.resolve(true));
     } catch (e) {
       this.logger.error(e);
       throw e;
