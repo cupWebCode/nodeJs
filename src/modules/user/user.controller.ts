@@ -1,12 +1,11 @@
-import { Controller, Post, Req, Body, Headers, Get, Res, HttpStatus, UsePipes, Param } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Post, Get, Put, Delete, Body, Headers, Res, HttpStatus, UsePipes } from '@nestjs/common';
+import { Response } from 'express';
 
 import { SchemaUserBuilder } from '../../validation/schema-builder/schema-user-builder';
-import { TempStorageService } from './services/temp-storage.service';
-import { UserDto, UserIdDto } from './dto/user.dto';
+import { UserDto } from './dto/user.dto';
 import { RequestValidatorPipe } from 'src/pipes/request-validator.pipe';
 import { ResponseApiSuccess } from 'src/common/response-api';
-import { User } from './interfaces/user';
+import { UserService } from './services/user.service';
 
 const createUserSchema = new SchemaUserBuilder().createUser<Body>().options({
   abortEarly: false,
@@ -15,20 +14,66 @@ const createUserSchema = new SchemaUserBuilder().createUser<Body>().options({
 
 @Controller('user')
 export class UserController {
-  constructor(public storage: TempStorageService) {}
-  //CREATE user
+  constructor(public userService: UserService) {}
+  
   @Post()
   @UsePipes(new RequestValidatorPipe<UserDto>(createUserSchema))
-  createUser(@Res() res: Response, @Body() userDto: UserDto): void {
-    this.storage.addUser(userDto);
-    res.status(HttpStatus.OK).json(new ResponseApiSuccess<any>(true, { userName: userDto.userName }));
+  createUser(@Res() response: Response, @Body() userDto: UserDto): void {
+    this.userService.createUser(userDto)
+    .then((result) => {
+      response
+        .json(new ResponseApiSuccess<any>(true, null, `User ${userDto.userName} was created successfully.`))
+        .status(HttpStatus.CREATED);
+    })
+    .catch(e => console.error(e.stack));
   }
 
   @Get()
-  getUser(@Headers() headers: UserIdDto, @Res() res: Response, @Body() userDto: UserDto): void {
-    const userId = headers.id;
-    const user: User = this.storage.getUser(userId);
-    res.status(HttpStatus.OK).json({ user });
+  getUser(@Headers() headers: Partial<UserDto>, @Res() response: Response): void {
+  this.userService.getUser(headers.id as string)
+    .then(result => {
+      if (result.length) {
+        const user = result[0];
+        return response.json(new ResponseApiSuccess<Partial<UserDto>>(true, user, null))
+          .status(HttpStatus.OK);
+      }
+      response
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+    })
+    .catch(e => console.error(e.stack));
   }
 
+  @Put(':edit')
+  editUser(@Body() userDto: UserDto, @Res() response: Response): void {
+    this.userService.editUser(userDto)
+    .then((result) => {
+      if (result.length && result[0]) {
+        return response
+        .json(new ResponseApiSuccess<any>(true, null, `User ${userDto.userName} was updated successfully.`))
+        .status(HttpStatus.OK);
+      }
+      response
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+      
+    })
+    .catch(e => console.error(e.stack));
+  }
+
+  @Delete(':delete')
+  deleteUser(@Headers() headers: Partial<UserDto>, @Res() response: Response): void {
+    this.userService.deleteUser(headers.id)
+    .then((result) => {
+      if (result) {
+      return response
+        .json(new ResponseApiSuccess<any>(true, null, `User was deleted successfully.`))
+        .status(HttpStatus.OK);
+      }
+      response
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+    })
+    .catch(e => console.error(e.stack));
+  }
 }

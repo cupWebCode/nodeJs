@@ -1,11 +1,8 @@
 export class UserDto {
   readonly id: string;
   readonly userName: string;
-  readonly password: string;
-  //readonly age: number;
+  readonly country: string;
   readonly email: string;
-}
-
-export class UserIdDto {
-  readonly id: string;
+  readonly mobilePhone: string;
+  readonly password: string;
 }
