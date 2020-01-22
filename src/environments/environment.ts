@@ -4,12 +4,21 @@ export const environment = {
   api: {
     prefix: "/api"
   },
-  pg: {
-    user: 'postgres',
-    host: 'localhost',
+  db: {
     database: 'nodeJs',
+    username: 'postgres',
     password: 'superuser',
-    port: 5432,
+    options: {
+      host: 'localhost',
+      dialect: 'postgres',
+      //operatorsAliases: false,
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
+    },
   },
   whiteList: ['http://localhost:4200']
 };
