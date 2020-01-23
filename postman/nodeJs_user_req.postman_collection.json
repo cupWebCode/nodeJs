@@ -1,173 +1,91 @@
 {
-	"id": "e3303777-7da8-7cb8-3f48-c64981797e4f",
-	"name": "nodeJs_user_req",
-	"description": "",
-	"order": [
-		"0a27b7a2-fb82-8b3e-f386-8ddfc60fedad",
-		"595d2ca9-d6ef-fd71-5cf8-479187b4ebfd",
-		"2fa11a66-21b8-e39d-3e68-fe5d856b61fc",
-		"66b6ebb0-fe48-1531-ef97-4362d5271a49",
-		"ebc268f1-c7f9-6bc5-1530-39923b6f4df5"
-	],
-	"folders": [],
-	"folders_order": [],
-	"timestamp": 0,
-	"owner": 0,
-	"public": false,
-	"requests": [
+	"variables": [],
+	"info": {
+		"name": "nodeJs_user_req",
+		"_postman_id": "e3303777-7da8-7cb8-3f48-c64981797e4f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
 		{
-			"id": "0a27b7a2-fb82-8b3e-f386-8ddfc60fedad",
-			"headers": "id: 0c827280-256d-11ea-ad65-931e49e25301\n",
-			"headerData": [
-				{
-					"key": "id",
-					"value": "0c827280-256d-11ea-ad65-931e49e25301",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3000/api/user",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1577096475825,
 			"name": "Get user by ID",
-			"description": "",
-			"collectionId": "e3303777-7da8-7cb8-3f48-c64981797e4f",
-			"responses": []
+			"request": {
+				"url": "http://localhost:3000/api/user",
+				"method": "GET",
+				"header": [
+					{
+						"key": "id",
+						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "2fa11a66-21b8-e39d-3e68-fe5d856b61fc",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3000/api/user",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "POST",
-			"data": [],
-			"dataMode": "raw",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1577096482850,
 			"name": "Create user",
-			"description": "",
-			"collectionId": "e3303777-7da8-7cb8-3f48-c64981797e4f",
-			"responses": [],
-			"rawModeData": "{\n\t\"login\": \"A123456s\",\n\t\"password\": \"ASDFaasd234\",\n\t\"age\": \"30\",\n\t\"isDeleted\": false\n}"
+			"request": {
+				"url": "http://localhost:3000/api/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"Jerzy\",\n\t\"password\": \"ASasdaDFESaDSqrw\",\n\t\"age\": \"19\",\n\t\"isDeleted\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "595d2ca9-d6ef-fd71-5cf8-479187b4ebfd",
-			"headers": "//limit: 2\nloginsubstring: As\n",
-			"headerData": [
-				{
-					"key": "limit",
-					"value": "2",
-					"description": "",
-					"enabled": false
-				},
-				{
-					"key": "loginsubstring",
-					"value": "As",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3000/api/user/list",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1577096479684,
-			"name": "Get auto-sugges list",
-			"description": "",
-			"collectionId": "e3303777-7da8-7cb8-3f48-c64981797e4f",
-			"responses": []
-		},
-		{
-			"id": "66b6ebb0-fe48-1531-ef97-4362d5271a49",
-			"headers": "id: \nContent-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "id",
-					"value": "",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3000/api/user/edit",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "PUT",
-			"data": [],
-			"dataMode": "raw",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1577096486726,
 			"name": "Edit user by ID",
-			"description": "",
-			"collectionId": "e3303777-7da8-7cb8-3f48-c64981797e4f",
-			"responses": [],
-			"rawModeData": "{\n\t\"id\": \"0c827280-256d-11ea-ad65-931e49e25301\",\n\t\"login\": \"TESTER Ivan\",\n\t\"password\": \"ASDFaasd234\",\n\t\"age\": \"25\",\n\t\"isDeleted\": false\n}"
+			"request": {
+				"url": "http://localhost:3000/api/user/edit",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "id",
+						"value": "",
+						"description": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"4441d850-3d2d-11ea-a4a4-e55bab63ae35\",\n\t\"userName\": \"Dzhamilya\",\n\t\"country\": \"Poland\",\n\t\"email\": \"Jerzy@pl\",\n\t\"mobilePhone\": \"+485641265\",\n\t\"password\": \"DzhamilyaPasswor_445123456987488\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "ebc268f1-c7f9-6bc5-1530-39923b6f4df5",
-			"headers": "id: 0c827280-256d-11ea-ad65-931e49e25301\n",
-			"headerData": [
-				{
-					"key": "id",
-					"value": "0c827280-256d-11ea-ad65-931e49e25301",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3000/api/user/delete",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "DELETE",
-			"data": [],
-			"dataMode": "params",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1577096490914,
 			"name": "Delete user by ID",
-			"description": "",
-			"collectionId": "e3303777-7da8-7cb8-3f48-c64981797e4f",
-			"responses": []
+			"request": {
+				"url": "http://localhost:3000/api/user/delete",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "id",
+						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }
