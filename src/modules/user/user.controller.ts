@@ -20,9 +20,9 @@ export class UserController {
   @UsePipes(new RequestValidatorPipe<UserDto>(createUserSchema))
   createUser(@Res() response: Response, @Body() userDto: UserDto): void {
     this.userService.createUser(userDto)
-    .then((result) => {
+    .then((result: UserDto) => {
       response
-        .json(new ResponseApiSuccess<any>(true, null, `User ${userDto.userName} was created successfully.`))
+        .json(new ResponseApiSuccess<any>(true, null, `User ${result.userName} was created successfully.`))
         .status(HttpStatus.CREATED);
     })
     .catch(e => console.error(e.stack));
@@ -46,6 +46,7 @@ export class UserController {
 
   @Put(':edit')
   editUser(@Body() userDto: UserDto, @Res() response: Response): void {
+    
     this.userService.editUser(userDto)
     .then((result) => {
       if (result.length && result[0]) {
@@ -61,7 +62,7 @@ export class UserController {
     .catch(e => console.error(e.stack));
   }
 
-  @Delete(':delete')
+  @Delete(':delete') 
   deleteUser(@Headers() headers: Partial<UserDto>, @Res() response: Response): void {
     this.userService.deleteUser(headers.id)
     .then((result) => {
