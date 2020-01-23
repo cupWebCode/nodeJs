@@ -6,6 +6,8 @@ import { UserDto } from './dto/user.dto';
 import { RequestValidatorPipe } from 'src/pipes/request-validator.pipe';
 import { ResponseApiSuccess } from 'src/common/response-api';
 import { UserService } from './services/user.service';
+import { Users } from './models/users';
+import { editUserType } from './types';
 
 const createUserSchema = new SchemaUserBuilder().createUser<Body>().options({
   abortEarly: false,
@@ -20,7 +22,7 @@ export class UserController {
   @UsePipes(new RequestValidatorPipe<UserDto>(createUserSchema))
   createUser(@Res() response: Response, @Body() userDto: UserDto): void {
     this.userService.createUser(userDto)
-    .then((result: UserDto) => {
+    .then((result: Users) => {
       response
         .json(new ResponseApiSuccess<any>(true, null, `User ${result.userName} was created successfully.`))
         .status(HttpStatus.CREATED);
@@ -31,10 +33,10 @@ export class UserController {
   @Get()
   getUser(@Headers() headers: Partial<UserDto>, @Res() response: Response): void {
   this.userService.getUser(headers.id as string)
-    .then(result => {
+    .then((result: Users[]) => {
       if (result.length) {
         const user = result[0];
-        return response.json(new ResponseApiSuccess<Partial<UserDto>>(true, user, null))
+        return response.json(new ResponseApiSuccess<Users>(true, user, null))
           .status(HttpStatus.OK);
       }
       response
@@ -48,7 +50,7 @@ export class UserController {
   editUser(@Body() userDto: UserDto, @Res() response: Response): void {
     
     this.userService.editUser(userDto)
-    .then((result) => {
+    .then((result: editUserType) => {
       if (result.length && result[0]) {
         return response
         .json(new ResponseApiSuccess<any>(true, null, `User ${userDto.userName} was updated successfully.`))

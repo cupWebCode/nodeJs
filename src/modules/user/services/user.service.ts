@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserDto } from '../dto/user.dto';
 import { Users } from '../models/users';
 import { UserDataMapper } from '../data-access/UserDataMapper';
+import { editUserType } from '../types';
 
 @Injectable()
 export class UserService {
@@ -16,7 +17,7 @@ export class UserService {
     return this.dataMapper.findById(id);
   }
 
-  async editUser(user: UserDto): Promise<[number, Users[]]> {
+  async editUser(user: UserDto): Promise<editUserType> {
     return this.dataMapper.editById(user);
   }
 
