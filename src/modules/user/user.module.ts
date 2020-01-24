@@ -5,11 +5,17 @@ import { UserService } from './services/user.service';
 import { DatabaseModule } from '../database/database.module';
 import { usersProviders } from './providers/users.provider';
 import { UserDataMapper } from './data-access/UserDataMapper';
+import { CryptService } from 'src/service/crypt/crypt.service';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [UserController],
-  providers: [UserService, UserDataMapper, ...usersProviders]
+  providers: [
+    UserService, 
+    UserDataMapper, 
+    ...usersProviders,
+    CryptService
+  ]
 })
 export class UserModule implements NestModule {
 

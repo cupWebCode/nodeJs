@@ -5,7 +5,7 @@ import { CorsMiddleware } from './middlewares/cors.middleware';
 @Module({
   imports: [UserModule],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
