@@ -4,14 +4,16 @@ import { UserDto } from "../dto/user.dto";
 import { UserProfileDto } from "../dto/user-profile.dto";
 import { UserProfile } from "../models/user-profile";
 import { editUserType, editProfileType } from "../types";
+import { CryptService } from "src/service/crypt/crypt.service";
 
 @Injectable()
 export class UserDataMapper {
   constructor(
     @Inject('USERS_REPOSITORY') private readonly usersRepository: typeof Users,
-    @Inject('USER-PROFILE_REPOSITORY') private readonly userProfileRepository: typeof UserProfile) {}
+    @Inject('USER-PROFILE_REPOSITORY') private readonly userProfileRepository: typeof UserProfile,
+    private crypt: CryptService) {}
 
-  async create(entity: UserDto): Promise<Users> {//TODO any UserDto
+  async create(entity: UserDto): Promise<Users> {
     const usersDALEntity = this.toUsersDalEntity([entity]);
     const userProfileDALEntity = this.toUserProfileDalEntity([entity as UserProfileDto]);
     
@@ -63,12 +65,12 @@ export class UserDataMapper {
     });
   }
 
-  private toUsersDalEntity(entites: UserDto[] ): UserDto[] {//TODO ADD CRYPTO PASSWORD
+  private toUsersDalEntity(entites: UserDto[] ): UserDto[] {
     return entites.map(entity => {
       return {
         id: entity.id,
         userName: entity.userName,
-        password: entity.password                                 ////TODO ADD CRYPTO PASSWORD
+        password: this.crypt.encrypt(entity.password)
       } as UserDto;
     });
   }
@@ -86,6 +88,11 @@ export class UserDataMapper {
   }
 
   private toDomain(entites: Users[]): Users[] {
-    return entites.map(entity => entity);
+
+    if (entites.length) {
+      const entity = entites[0];
+      entity.password = this.crypt.decrypt(entity.password);
+    }
+    return entites;
   }
 }
