@@ -1,6 +1,6 @@
 import { Table, Column, PrimaryKey, ForeignKey, Model } from 'sequelize-typescript';
 import { Users } from './users';
-
+//TODO COMMENTS
 @Table
 export class UserProfile extends Model<UserProfile> {
   @PrimaryKey
