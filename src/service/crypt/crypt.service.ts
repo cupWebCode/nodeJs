@@ -19,6 +19,7 @@ export class CryptService {
     const textParts = val.split(':');
     const iv = Buffer.from(textParts.shift(), 'hex');
     const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    if (!encryptedText.length) return val;
     const decipher = crypto.createDecipheriv(this.cipherName, Buffer.from(this.encryption_key), iv);
     let decrypted = decipher.update(encryptedText);
    
