@@ -20,20 +20,23 @@ export class UserController {
   
   @Post()
   @UsePipes(new RequestValidatorPipe<UserDto>(createUserSchema))
-  createUser(@Res() response: Response, @Body() userDto: UserDto): void {
-    this.userService.createUser(userDto)
-    .then((result: Users) => {
+  async createUser(@Res() response: Response, @Body() userDto: UserDto) {
+    try {
+      const result = await this.userService.createUser(userDto);
+      
       response
         .json(new ResponseApiSuccess<any>(true, null, `User ${result.userName} was created successfully.`))
         .status(HttpStatus.CREATED);
-    })
-    .catch(e => console.error(e.stack));
+    } catch (e) {
+      console.error(e.stack);
+    }
   }
 
   @Get()
-  getUser(@Headers() headers: Partial<UserDto>, @Res() response: Response): void {
-  this.userService.getUser(headers.id as string)
-    .then((result: Users[]) => {
+  async getUser(@Headers() headers: Partial<UserDto>, @Res() response: Response) {
+    try {
+      const result = await this.userService.getUser(headers.id as string);
+      
       if (result.length) {
         const user = result[0];
         return response.json(new ResponseApiSuccess<Users>(true, user, null))
@@ -42,41 +45,45 @@ export class UserController {
       response
         .json({ message: "User was't found." })
         .status(HttpStatus.NO_CONTENT);
-    })
-    .catch(e => console.error(e.stack));
+
+    } catch (e) {
+      console.error(e.stack);
+    }
   }
 
   @Put(':edit')
-  editUser(@Body() userDto: UserDto, @Res() response: Response): void {
+  async editUser(@Body() userDto: UserDto, @Res() response: Response) {
+    try {
+      const result = await this.userService.editUser(userDto);
     
-    this.userService.editUser(userDto)
-    .then((result: editUserType) => {
       if (result.length && result[0]) {
         return response
-        .json(new ResponseApiSuccess<any>(true, null, `User ${userDto.userName} was updated successfully.`))
-        .status(HttpStatus.OK);
+          .json(new ResponseApiSuccess<any>(true, null, `User ${userDto.userName} was updated successfully.`))
+          .status(HttpStatus.OK);
       }
       response
         .json({ message: "User was't found." })
         .status(HttpStatus.NO_CONTENT);
-      
-    })
-    .catch(e => console.error(e.stack));
+    } catch (e) {
+      console.error(e.stack);
+    }
   }
 
   @Delete(':delete') 
-  deleteUser(@Headers() headers: Partial<UserDto>, @Res() response: Response): void {
-    this.userService.deleteUser(headers.id)
-    .then((result) => {
+  async deleteUser(@Headers() headers: Partial<UserDto>, @Res() response: Response) {
+    try {
+      const result = await this.userService.deleteUser(headers.id);
+   
       if (result) {
-      return response
-        .json(new ResponseApiSuccess<any>(true, null, `User was deleted successfully.`))
-        .status(HttpStatus.OK);
-      }
-      response
-        .json({ message: "User was't found." })
-        .status(HttpStatus.NO_CONTENT);
-    })
-    .catch(e => console.error(e.stack));
+        return response
+          .json(new ResponseApiSuccess<any>(true, null, `User was deleted successfully.`))
+          .status(HttpStatus.OK);
+        }
+        response
+          .json({ message: "User was't found." })
+          .status(HttpStatus.NO_CONTENT);
+    } catch (e) {
+      console.error(e.stack);
+    }
   }
 }

@@ -3,7 +3,8 @@ import { Options } from 'sequelize';
 import { environment } from 'src/environments/environment';
 import { Users } from '../user/models/users';
 import { UserProfile } from '../user/models/user-profile';
-import * as mock_data from '../../../test/MOCK_DATA';
+const usersList = require('../../../test/MOCK_USERS');
+const userProfilesList = require('../../../test/MOCK_USERS_PROFILES');
 
 export const databaseProviders = [
   {
@@ -14,11 +15,11 @@ export const databaseProviders = [
       sequelize.addModels([Users, UserProfile]);
       await sequelize.sync({force: true}).then(() => {
         //ONLY FOR TEST REASON
-        for (let user of mock_data.users) {
-          Users.create(user);
+        for (let user of usersList) {
+          Users.upsert<Users>(user);
         }
-        for (let profile of mock_data.userProfiles) {
-          UserProfile.create(profile);
+        for (let profile of userProfilesList) {
+          UserProfile.upsert<UserProfile>(profile);
         }
       });
       return sequelize;

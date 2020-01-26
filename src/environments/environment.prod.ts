@@ -5,7 +5,7 @@ export const environment = {
     prefix: "/api"
   },
   db: {
-    dbName: 'nodeJs',
+    dbName: 'node_js',
     username: 'postgres',
     password: 'superuser',
     params: {

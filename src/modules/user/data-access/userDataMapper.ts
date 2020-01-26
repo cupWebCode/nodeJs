@@ -50,10 +50,12 @@ export class UserDataMapper {
 
   async findById(id: string): Promise<Users[]> {
     return await this.usersRepository.findAll({
+      where: { id },
+      attributes: { exclude: ['password'] },
       include: [{
         model: UserProfile,
         where: { profile_id: id }
-    }]
+      }]
     }).then((result: Users[]) => this.toDomain(result));
   }
 
@@ -88,11 +90,17 @@ export class UserDataMapper {
   }
 
   private toDomain(entites: Users[]): Users[] {
-
+    let modifiedEntities = [];
     if (entites.length) {
-      const entity = entites[0];
-      entity.password = this.crypt.decrypt(entity.password);
+      
+      modifiedEntities = entites.map(entity => {
+        if (entity.password) {
+          return entity.password = this.crypt.decrypt(entity.password);
+        }
+      
+        return entity;
+      });
     }
-    return entites;
+    return modifiedEntities as Users[];
   }
 }
