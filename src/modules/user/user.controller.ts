@@ -69,7 +69,7 @@ export class UserController {
     }
   }
 
-  @Delete(':delete') 
+  @Delete(':delete')
   async deleteUser(@Headers() headers: Partial<UserDto>, @Res() response: Response) {
     try {
       const result = await this.userService.deleteUser(headers.id);

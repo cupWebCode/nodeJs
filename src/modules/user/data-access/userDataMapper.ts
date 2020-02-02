@@ -17,7 +17,7 @@ export class UserDataMapper {
     const usersDALEntity = this.toUsersDalEntity([entity]);
     const userProfileDALEntity = this.toUserProfileDalEntity([entity as UserProfileDto]);
     
-    const userRes = await this.usersRepository.create<Users>(usersDALEntity[0]);    
+    const userRes = await this.usersRepository.create<Users>(usersDALEntity[0]);
     const userPrifileRes = await this.userProfileRepository.create<UserProfile>(userProfileDALEntity[0]);
 
     return Promise.all<Users, UserProfile>([userRes, userPrifileRes])

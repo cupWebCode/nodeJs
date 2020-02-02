@@ -1,5 +1,3 @@
-import { UserProfileDto } from "./user-profile.dto";
-
 export class UserDto {
   readonly id: string;
   readonly userName: string;

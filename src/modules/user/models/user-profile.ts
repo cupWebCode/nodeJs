@@ -18,5 +18,5 @@ export class UserProfile extends Model<UserProfile> {
 
   @Column 
   @ForeignKey(() => Users) 
-  users_id: string;
+  user_id: string;
 }

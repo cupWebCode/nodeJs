@@ -1,11 +1,13 @@
-import { Table, Column, PrimaryKey, HasOne, ForeignKey, Model } from 'sequelize-typescript';
+import { Table, Column, PrimaryKey, HasOne, Model, BelongsToMany } from 'sequelize-typescript';
 import { UserProfile } from './user-profile';
+import { Groups } from 'src/modules/group/models/groups';
+import { UserGroups } from 'src/modules/group/models/user-groups';
 
 @Table
 export class Users extends Model<Users> {
   @PrimaryKey
   @Column
-  id: string;
+  user_id: string;
 
   @Column
   userName: string;
@@ -15,4 +17,7 @@ export class Users extends Model<Users> {
 
   @HasOne(() => UserProfile)
   user_profile: UserProfile;
+
+  @BelongsToMany(() => Groups, () => UserGroups)
+  groups: Groups[];
 }
