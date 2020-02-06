@@ -35,9 +35,9 @@ export const databaseProviders = [
           UserGroups.upsert<UserGroups>(groupUser);
         }
 
-        // for (let profile of userProfilesList) {
-        //   UserProfile.upsert<UserProfile>(profile);
-        // }
+        for (let profile of userProfilesList) {
+          UserProfile.upsert<UserProfile>(profile);
+        }
       });
       return sequelize;
     }

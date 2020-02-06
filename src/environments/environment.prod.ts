@@ -5,13 +5,18 @@ export const environment = {
     prefix: "/api"
   },
   db: {
-    dbName: 'node_js',
+    database: 'node_js',
     username: 'postgres',
     password: 'superuser',
-    params: {
+    options: {
       host: 'localhost',
       dialect: 'postgres',
-      operatorsAliases: false
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
     },
   },
   whiteList: ['http://localhost:4200']

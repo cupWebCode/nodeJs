@@ -2,15 +2,37 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Groups } from "../models/groups";
 import { GroupDto } from "../dto/group.dto";
 import { Users } from "src/modules/user/models/users";
+import { UserGroups } from "../models/user-groups";
 
 @Injectable()
 export class GroupDataMapper {
   constructor(
-    @Inject('GROUP_REPOSITORY') private readonly groupsRepository: typeof Groups) {}
-
+    @Inject('GROUP_REPOSITORY') private readonly groupsRepository: typeof Groups,
+    @Inject('GROUP_USERG_ROUPS') private readonly groupUserRepository: typeof UserGroups,
+    @Inject('USERS_REPOSITORY') private readonly usersRepository: typeof Users,
+    
+    ) {}
   async create(entity: GroupDto): Promise<Groups> {
     const groupDALEntity = this.toGroupDalEntity([entity]);
     return await this.groupsRepository.create<Groups>(groupDALEntity[0]);
+  }
+
+  async assignUserToGroup(data: Partial<Users & Groups>): Promise<UserGroups> {
+    const userRes = this.usersRepository.findOne({
+      where: {user_id: data.user_id}
+    })
+
+    const groupsRes = this.groupsRepository.findOne({
+      where: {group_id: data.group_id}
+    })
+
+    return Promise.all<Users, Groups>([userRes, groupsRes])
+      .then((values: [Users, Groups]) => {
+        if(values[0] && values[1]) {
+          return this.groupUserRepository.create<UserGroups>(data);
+        }
+        return null;
+    });
   }
   
   async update(entity: GroupDto): Promise<[number, Groups[]]> {

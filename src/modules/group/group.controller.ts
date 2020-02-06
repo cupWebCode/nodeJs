@@ -1,10 +1,10 @@
-import { Controller, Post, UsePipes, Res, Body, HttpStatus, Headers, Get, Put, Delete } from '@nestjs/common';
+import { Controller, Post, UsePipes, Res, Body, HttpStatus, Headers, Get, Put, Delete, Query, Req } from '@nestjs/common';
 import { Response } from 'express';
-import { UserService } from '../user/services/user.service';
 import { ResponseApiSuccess } from 'src/common/response-api';
 import { GroupService } from './services/group.service';
 import { GroupDto } from './dto/group.dto';
 import { Groups } from './models/groups';
+import { Users } from '../user/models/users';
 
 @Controller('group')
 export class GroupController {
@@ -18,6 +18,30 @@ export class GroupController {
       response
         .json(new ResponseApiSuccess<any>(true, null, `Group ${result.name} was created successfully.`))
         .status(HttpStatus.CREATED);
+
+    } catch (e) {
+      console.error(e.stack);
+    }
+  }
+
+  @Post(':id/user')
+  async addUsersToGroup(@Res() response: Response, @Req() request: any, @Body() body: Partial<Users>) {
+    try {
+      const data = {
+        group_id: request.params.id,
+        user_id: body.user_id
+      };
+      
+      const result = await this.groupService.assignUserTogroup(data);
+
+      if (result ) {
+        return response.json(new ResponseApiSuccess<Groups>(true, result, null))
+          .status(HttpStatus.OK);
+      }
+     
+      response
+        .json({ message: 'Specified group or user were not found.'})
+        .status(HttpStatus.NO_CONTENT);
 
     } catch (e) {
       console.error(e.stack);
@@ -54,7 +78,7 @@ export class GroupController {
           .status(HttpStatus.OK);
       }
       response
-        .json({ message: "No groups." })
+        .json({ message: 'No groups.' })
         .status(HttpStatus.NO_CONTENT);
 
     } catch (e) {

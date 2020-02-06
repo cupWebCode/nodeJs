@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GroupDataMapper } from '../data-access/groupDataMapper';
 import { GroupDto } from '../dto/group.dto';
 import { Groups } from '../models/groups';
+import { Users } from 'src/modules/user/models/users';
 
 @Injectable()
 export class GroupService {
@@ -10,6 +11,10 @@ export class GroupService {
     
   async createGroup(group: GroupDto): Promise<Groups> {
     return await this.dataMapper.create(group);
+  }
+
+  async assignUserTogroup(data: Partial<Users & Groups>): Promise<any> {
+    return await this.dataMapper.assignUserToGroup(data);
   }
   
   async updateGroup(group: GroupDto): Promise<[number, Groups[]]> {

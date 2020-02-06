@@ -18,9 +18,9 @@ export class UserDataMapper {
     const userProfileDALEntity = this.toUserProfileDalEntity([entity as UserProfileDto]);
     
     const userRes = await this.usersRepository.create<Users>(usersDALEntity[0]);
-    const userPrifileRes = await this.userProfileRepository.create<UserProfile>(userProfileDALEntity[0]);
+    const userProfileRes = await this.userProfileRepository.create<UserProfile>(userProfileDALEntity[0]);
 
-    return Promise.all<Users, UserProfile>([userRes, userPrifileRes])
+    return Promise.all<Users, UserProfile>([userRes, userProfileRes])
       .then((values: [Users, UserProfile]) => { 
         return values[0]
     });
@@ -32,17 +32,17 @@ export class UserDataMapper {
     
     const userRes = await this.usersRepository.update<Users>(usersDALEntity[0], {
       where: {
-        id: entity.id
+        user_id: entity.id
       }
     });
 
-    const userPrifileRes = await this.userProfileRepository.update<UserProfile>(userProfileDALEntity[0], {
+    const userProfileRes = await this.userProfileRepository.update<UserProfile>(userProfileDALEntity[0], {
       where: {
         profile_id: entity.id
       }
     });
    
-    return Promise.all<editUserType, editProfileType>([userRes, userPrifileRes])
+    return Promise.all<editUserType, editProfileType>([userRes, userProfileRes])
       .then((values: [editUserType, editProfileType]) => {
         return values[0]
     });
@@ -50,30 +50,26 @@ export class UserDataMapper {
 
   async findById(id: string): Promise<Users[]> {
     return await this.usersRepository.findAll({
-      where: { id },
-      attributes: { exclude: ['password'] },
-      include: [{
-        model: UserProfile,
-        where: { profile_id: id }
-      }]
+      where: { user_id: id },
+      attributes: { exclude: ['password'] }
     }).then((result: Users[]) => this.toDomain(result));
   }
 
   async deleteById(id: string): Promise<number> {
     return await this.usersRepository.destroy({
       where: {
-        id
+        user_id: id
       }
     });
   }
 
-  private toUsersDalEntity(entites: UserDto[] ): UserDto[] {
+  private toUsersDalEntity(entites: UserDto[] ): Users[] {
     return entites.map(entity => {
       return {
-        id: entity.id,
+        user_id: entity.id,
         userName: entity.userName,
         password: this.crypt.encrypt(entity.password)
-      } as UserDto;
+      } as Users;
     });
   }
 
