@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { Users } from "../models/users";
 import { Inject, Injectable } from "@nestjs/common";
 import { UserDto } from "../dto/user.dto";
@@ -12,6 +13,19 @@ export class UserDataMapper {
     @Inject('USERS_REPOSITORY') private readonly usersRepository: typeof Users,
     @Inject('USER-PROFILE_REPOSITORY') private readonly userProfileRepository: typeof UserProfile,
     private crypt: CryptService) {}
+
+  async login(entity: Partial<UserDto>): Promise<any> {//TODO any
+   return await this.getAll()
+      .then(res => {
+        let employee = _.find(res, { userName: entity.userName });
+        if (employee === undefined || employee.password !== entity.password) {
+          return Promise.resolve({ success: false,  message: 'Bad username/password combination.' }) as Promise<any>;
+        }
+        return Promise.resolve(employee);
+      }).catch(e => {
+        console.log(e);
+      });
+  }
 
   async create(entity: UserDto): Promise<Users> {
     const usersDALEntity = this.toUsersDalEntity([entity]);
@@ -55,6 +69,12 @@ export class UserDataMapper {
     }).then((result: Users[]) => this.toDomain(result));
   }
 
+  async getAll(): Promise<Users[]> {
+    return await this.usersRepository.findAll({
+      //attributes: { exclude: ['password'] }//TODO
+    }).then((result: Users[]) => this.toDomain(result));
+  }
+
   async deleteById(id: string): Promise<number> {
     return await this.usersRepository.destroy({
       where: {
@@ -68,7 +88,9 @@ export class UserDataMapper {
       return {
         user_id: entity.id,
         userName: entity.userName,
-        password: this.crypt.encrypt(entity.password)
+        password: this.crypt.encrypt(entity.password),
+        refresh_token: entity.refresh_token,
+        access_token: entity.access_token,
       } as Users;
     });
   }
@@ -91,7 +113,16 @@ export class UserDataMapper {
       
       modifiedEntities = entites.map(entity => {
         if (entity.password) {
-          return entity.password = this.crypt.decrypt(entity.password);
+          const obj = {
+            user_id: entity.user_id,
+            userName: entity.userName,
+            password: entity.password ? this.crypt.decrypt(entity.password) : '',
+            refresh_token: entity.refresh_token,
+            access_token: entity.access_token,
+            user_profile: entity.user_profile,
+            groups: entity.groups
+          };
+          return obj;
         }
       
         return entity;

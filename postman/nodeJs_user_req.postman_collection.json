@@ -15,7 +15,7 @@
 				"header": [
 					{
 						"key": "id",
-						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"value": "b5e40f60-5041-11ea-a101-edb6083e6386",
 						"description": ""
 					}
 				],
@@ -38,7 +38,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"login\": \"Jerzy\",\n\t\"password\": \"ASasdaDFESaDSqrw\",\n\t\"age\": \"19\",\n\t\"isDeleted\": false\n}"
+					"raw": "{\n\t\"userName\": \"ZZZzzz\",\n\t\"country\": \"Ukraine\",\n\t\"email\": \"ihor@pl\",\n\t\"mobilePhone\": \"+485641265\",\n\t\"password\": \"132456789asdfAASD--1235656__ddd\"\n}"
 				},
 				"description": ""
 			},
@@ -64,7 +64,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"id\": \"4441d850-3d2d-11ea-a4a4-e55bab63ae35\",\n\t\"userName\": \"Dzhamilya\",\n\t\"country\": \"Poland\",\n\t\"email\": \"Jerzy@pl\",\n\t\"mobilePhone\": \"+485641265\",\n\t\"password\": \"DzhamilyaPasswor_445123456987488\"\n}"
+					"raw": "{\n\t\"id\": \"b5e40f60-5041-11ea-a101-edb6083e6386\",\n\t\"userName\": \"Ihor\",\n\t\"country\": \"Polandddddddddd\",\n\t\"email\": \"Ihor@pl\",\n\t\"mobilePhone\": \"+480885048932\",\n\t\"password\": \"DzhamilyaPasswor_445123456987488\"\n}"
 				},
 				"description": ""
 			},
@@ -78,7 +78,7 @@
 				"header": [
 					{
 						"key": "id",
-						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"value": "b5e40f60-5041-11ea-a101-edb6083e6386",
 						"description": ""
 					}
 				],

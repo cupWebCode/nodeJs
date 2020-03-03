@@ -20,6 +20,47 @@ export class UserController {
     private loggerService: LoggerService
     ) {}
   
+  @Get(':list')
+  async getUsersList(@Headers() headers: Partial<UserDto>, @Req() req: Request, @Res() response: Response) {
+    try {
+      this.loggerService.info('getUser');
+      const result = await this.userService.getUser();
+      if (result.length) {
+        const user = result;
+        return response.json(new ResponseApiSuccess<Users[]>(true, user, null))
+          .status(HttpStatus.OK);
+      }
+      response
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+
+    } catch (e) {
+      this.loggerService.error(req.method, headers.id, e.stack);
+    }
+  }
+
+  @Post('/login')
+  async login(@Res() res: Response, @Req() req: Request, @Body() userDto: UserDto) {
+    try {
+      const credentials: Partial<UserDto> = {
+        userName: userDto.userName,
+        password: userDto.password
+      };
+      const result = await this.userService.loginUser(credentials)
+
+      if (result) {
+        const user = result;
+        return res.json(new ResponseApiSuccess<Users>(true, user, null))
+          .status(HttpStatus.OK);
+      }
+      res
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+    } catch (e) {
+      this.loggerService.error(req.method, userDto, e.message);
+    }
+  }
+
   @Post()
   @UsePipes(new RequestValidatorPipe<UserDto>(createUserSchema))
   async createUser(@Res() response: Response, @Req() req: Request, @Body() userDto: UserDto) {
@@ -29,9 +70,12 @@ export class UserController {
         ...userDto,
         password: '***'
       });
-
+      const data = {
+        refresh_token: userDto.refresh_token,
+        access_token: userDto.access_token
+      };
       response
-        .json(new ResponseApiSuccess<any>(true, null, `User ${result.userName} was created successfully.`))
+        .json(new ResponseApiSuccess<any>(true, data, `User ${result.userName} was created successfully.`))
         .status(HttpStatus.CREATED);
     } catch (e) {
       this.loggerService.error(req.method, userDto, e.stack);

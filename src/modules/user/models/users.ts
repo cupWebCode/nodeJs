@@ -15,6 +15,12 @@ export class Users extends Model<Users> {
   @Column
   password: string;
 
+  @Column
+  refresh_token: string;
+
+  @Column
+  access_token: string;
+
   @HasOne(() => UserProfile)
   user_profile: UserProfile;
 
