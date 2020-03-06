@@ -9,10 +9,10 @@ export class UserService {
   constructor(
     public dataMapper: UserDataMapper) {}
  
-  async loginUser(user: Partial<UserDto>): Promise<Users> {
+  async loginUser(user: Partial<UserDto>): Promise<Partial<Users>> {
     return await this.dataMapper.login(user);
   }
-    
+
   async createUser(user: UserDto): Promise<Users> {
     return await this.dataMapper.create(user);
   }

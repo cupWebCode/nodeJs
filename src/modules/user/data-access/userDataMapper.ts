@@ -13,17 +13,34 @@ export class UserDataMapper {
     @Inject('USERS_REPOSITORY') private readonly usersRepository: typeof Users,
     @Inject('USER-PROFILE_REPOSITORY') private readonly userProfileRepository: typeof UserProfile,
     private crypt: CryptService) {}
-
-  async login(entity: Partial<UserDto>): Promise<any> {//TODO any
+  
+  async login(entity: Partial<UserDto>): Promise<Partial<Users>> {
    return await this.getAll()
       .then(res => {
-        let employee = _.find(res, { userName: entity.userName });
-        if (employee === undefined || employee.password !== entity.password) {
-          return Promise.resolve({ success: false,  message: 'Bad username/password combination.' }) as Promise<any>;
+        let employee = this.findUser(res, entity.userName, entity.password);
+        if (!employee) {
+          return Promise.reject();
         }
-        return Promise.resolve(employee);
-      }).catch(e => {
-        console.log(e);
+        delete employee.password;
+        return employee;
+      })
+      .then(user => {
+        const tokens = {
+          access_token: entity.access_token,
+          refresh_token: entity.refresh_token,
+        };
+        this.usersRepository.update<Users>(tokens, {
+          where: {
+            user_id: user.user_id
+          }
+        });
+        return {
+          ...user,
+          ...tokens
+        };
+       })
+      .catch(e => {
+        return e;
       });
   }
 
@@ -65,14 +82,14 @@ export class UserDataMapper {
   async findById(id: string): Promise<Users[]> {
     return await this.usersRepository.findAll({
       where: { user_id: id },
-      attributes: { exclude: ['password'] }
     }).then((result: Users[]) => this.toDomain(result));
   }
 
   async getAll(): Promise<Users[]> {
     return await this.usersRepository.findAll({
-      //attributes: { exclude: ['password'] }//TODO
-    }).then((result: Users[]) => this.toDomain(result));
+    }).then((result: Users[]) => {
+      return this.toDomain(result)
+    });
   }
 
   async deleteById(id: string): Promise<number> {
@@ -89,8 +106,6 @@ export class UserDataMapper {
         user_id: entity.id,
         userName: entity.userName,
         password: this.crypt.encrypt(entity.password),
-        refresh_token: entity.refresh_token,
-        access_token: entity.access_token,
       } as Users;
     });
   }
@@ -129,5 +144,12 @@ export class UserDataMapper {
       });
     }
     return modifiedEntities as Users[];
+  }
+
+  private findUser(data: Users[], userName: string, password: string): Users {
+    let employee = _.find(data, { userName: userName });
+    if (employee !== undefined && employee.password === password) {
+      return employee;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Get, Put, Delete, Body, Headers, Res, HttpStatus, UsePipes, HttpException, Req } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Body, Headers, Res, HttpStatus, UsePipes, Req } from '@nestjs/common';
 import { Response, Request } from 'express';
 
 import { SchemaUserBuilder } from '../../validation/schema-builder/schema-user-builder';
@@ -44,15 +44,18 @@ export class UserController {
     try {
       const credentials: Partial<UserDto> = {
         userName: userDto.userName,
-        password: userDto.password
+        password: userDto.password,
+        access_token: userDto.access_token,
+        refresh_token: userDto.refresh_token
       };
       const result = await this.userService.loginUser(credentials)
 
       if (result) {
         const user = result;
-        return res.json(new ResponseApiSuccess<Users>(true, user, null))
+        return res.json(new ResponseApiSuccess<Partial<Users>>(true, user, null))
           .status(HttpStatus.OK);
       }
+      
       res
         .json({ message: "User was't found." })
         .status(HttpStatus.NO_CONTENT);
@@ -70,12 +73,9 @@ export class UserController {
         ...userDto,
         password: '***'
       });
-      const data = {
-        refresh_token: userDto.refresh_token,
-        access_token: userDto.access_token
-      };
+
       response
-        .json(new ResponseApiSuccess<any>(true, data, `User ${result.userName} was created successfully.`))
+        .json(new ResponseApiSuccess<any>(true, null, `User ${result.userName} was created successfully.`))
         .status(HttpStatus.CREATED);
     } catch (e) {
       this.loggerService.error(req.method, userDto, e.stack);

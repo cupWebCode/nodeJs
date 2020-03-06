@@ -3,17 +3,16 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const config = require('./config');
 
-app.all('/refresh', (req, res, next) => {
-  let access_token = req.headers['x-access-token'];//Not in use
+app.all('/token', (req, res, next) => {
   let refresh_token = req.headers['x-refresh-token'];
-  
-  if (access_token && refresh_token) {
+
+  if (refresh_token) {//Should I check if refresh_token equal refresh_token from DB?
     jwt.verify(refresh_token, config.refresh_token_secret, function(err) {
       if (err) {
         return res.status(403)
           .json({ success: false, message: 'Failed to authenticate token.' });
       }
-
+      
       const data = jwt.decode(refresh_token).firstName;
       const user = {
         firstName: data

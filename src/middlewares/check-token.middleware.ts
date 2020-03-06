@@ -1,15 +1,16 @@
 import { Injectable, NestMiddleware, Res, Req } from '@nestjs/common';
 import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class CheckTokenMiddleware implements NestMiddleware {
   async use(@Req() req: Request, @Res() res: Response, next: () => void) {
-    let refresh_token = req.headers['x-refresh-token'] as string;
+    
     let access_token = req.headers['x-access-token'] as string;
-    const secret = 'secret'; // TODO define env variable
+    const secret = 'secret';
 
-    if (access_token && refresh_token) {
+    if (access_token) {
       jwt.verify(access_token, secret, function(err) {
         if (err && err.hasOwnProperty('expiredAt')) {
           return res.status(401)

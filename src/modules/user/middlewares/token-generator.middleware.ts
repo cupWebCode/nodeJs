@@ -5,14 +5,14 @@ import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class TokenGeneratorMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: Function): any {
-    const secret = 'secret'; // TODO define env variable
-    const refreshTokenSecret = 'refreshTokenSecret';// TODO define env variable
-    const expiresIn = 100;// TODO define env variable
-    const refreshTokenExpiresIn = 86400;// TODO define env variable <====== how much time?
+    const secret = 'secret';
+    const refreshTokenSecret = 'refreshTokenSecret';
+    const expiresIn = 20;
+    const refreshTokenExpiresIn = 86400;
 
     const postData = req.body;
     const claims = {
-        "firstName": postData.email// TODO give user permissions?
+        "firstName": postData.email
     }
 
     const token = jwt.sign(claims, secret, { expiresIn});

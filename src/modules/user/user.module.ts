@@ -30,6 +30,6 @@ export class UserModule implements NestModule {
 
       consumer
       .apply(TokenGeneratorMiddleware)
-      .forRoutes({ path: 'user', method: RequestMethod.POST });
+      .forRoutes({ path: 'user/login', method: RequestMethod.POST });
   }
 }
