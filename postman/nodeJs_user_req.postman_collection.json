@@ -1,0 +1,91 @@
+{
+	"variables": [],
+	"info": {
+		"name": "nodeJs_user_req",
+		"_postman_id": "e3303777-7da8-7cb8-3f48-c64981797e4f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get user by ID",
+			"request": {
+				"url": "http://localhost:3000/api/user",
+				"method": "GET",
+				"header": [
+					{
+						"key": "id",
+						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"request": {
+				"url": "http://localhost:3000/api/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"Jerzy\",\n\t\"password\": \"ASasdaDFESaDSqrw\",\n\t\"age\": \"19\",\n\t\"isDeleted\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Edit user by ID",
+			"request": {
+				"url": "http://localhost:3000/api/user/edit",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "id",
+						"value": "",
+						"description": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"4441d850-3d2d-11ea-a4a4-e55bab63ae35\",\n\t\"userName\": \"Dzhamilya\",\n\t\"country\": \"Poland\",\n\t\"email\": \"Jerzy@pl\",\n\t\"mobilePhone\": \"+485641265\",\n\t\"password\": \"DzhamilyaPasswor_445123456987488\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user by ID",
+			"request": {
+				"url": "http://localhost:3000/api/user/delete",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "id",
+						"value": "0c827280-256d-11ea-ad65-931e49e25301",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
