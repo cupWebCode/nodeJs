@@ -1,7 +1,6 @@
 import { Injectable, NestMiddleware, Res, Req } from '@nestjs/common';
 import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class CheckTokenMiddleware implements NestMiddleware {

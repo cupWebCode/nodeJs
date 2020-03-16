@@ -1,7 +1,7 @@
 import { Table, Column, PrimaryKey, HasOne, Model, BelongsToMany, AllowNull } from 'sequelize-typescript';
 import { UserProfile } from './user-profile';
-import { Groups } from 'src/modules/group/models/groups';
-import { UserGroups } from 'src/modules/group/models/user-groups';
+import { Groups } from '../../group/models/groups';
+import { UserGroups } from '../../group/models/user-groups';
 
 @Table
 export class Users extends Model<Users> {

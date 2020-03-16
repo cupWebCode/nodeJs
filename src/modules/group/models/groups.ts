@@ -1,5 +1,5 @@
 import { Table, Column, PrimaryKey, Model, BelongsToMany } from 'sequelize-typescript';
-import { Users } from 'src/modules/user/models/users';
+import { Users } from '../../user/models/users';
 import { UserGroups } from './user-groups';
 
 @Table

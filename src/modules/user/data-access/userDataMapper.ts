@@ -5,7 +5,7 @@ import { UserDto } from "../dto/user.dto";
 import { UserProfileDto } from "../dto/user-profile.dto";
 import { UserProfile } from "../models/user-profile";
 import { editUserType, editProfileType } from "../types";
-import { CryptService } from "src/service/crypt/crypt.service";
+import { CryptService } from "../../../service/crypt/crypt.service";
 
 @Injectable()
 export class UserDataMapper {

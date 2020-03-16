@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { GroupDataMapper } from '../data-access/groupDataMapper';
 import { GroupDto } from '../dto/group.dto';
 import { Groups } from '../models/groups';
-import { Users } from 'src/modules/user/models/users';
+import { Users } from '../../user/models/users';
 
 @Injectable()
 export class GroupService {
   constructor(
-    public dataMapper: GroupDataMapper) {}
+    public dataMapper?: GroupDataMapper) {}
     
   async createGroup(group: GroupDto): Promise<Groups> {
     return await this.dataMapper.create(group);

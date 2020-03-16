@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UserDto } from '../dto/user.dto';
 import { Users } from '../models/users';
-import { UserDataMapper } from '../data-access/userDataMapper';
+import { UserDataMapper as UserDataMapper1 } from '../data-access/userDataMapper';
 import { editUserType } from '../types';
 
 @Injectable()
 export class UserService {
   constructor(
-    public dataMapper: UserDataMapper) {}
+    public dataMapper: UserDataMapper1) {}
  
   async loginUser(user: Partial<UserDto>): Promise<Partial<Users>> {
     return await this.dataMapper.login(user);

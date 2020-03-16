@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Options } from 'sequelize';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { Users } from '../user/models/users';
 import { UserProfile } from '../user/models/user-profile';
 import { Groups } from '../group/models/groups';

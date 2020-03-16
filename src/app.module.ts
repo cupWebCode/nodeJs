@@ -5,11 +5,13 @@ import { GroupModule } from './modules/group/group.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { CheckTokenMiddleware } from './middlewares/check-token.middleware';
 import { UserController } from './modules/user/user.controller';
+import { LoggerService } from './service/logger/logger.service';
+import { UserDataMapper } from './modules/user/data-access/userDataMapper';
 
 @Module({
   imports: [UserModule, GroupModule, SharedModule],
   controllers: [],
-  providers: []
+  providers: [UserDataMapper]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

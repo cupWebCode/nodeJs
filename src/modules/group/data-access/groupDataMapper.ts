@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Groups } from "../models/groups";
 import { GroupDto } from "../dto/group.dto";
-import { Users } from "src/modules/user/models/users";
+import { Users } from "../../user/models/users";
 import { UserGroups } from "../models/user-groups";
 
 @Injectable()

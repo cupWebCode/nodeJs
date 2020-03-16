@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware, Req, Res } from '@nestjs/common';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 import { Response, Request } from 'express';
 const cors = require('cors')
 

@@ -3,11 +3,11 @@ import { Response, Request } from 'express';
 
 import { SchemaUserBuilder } from '../../validation/schema-builder/schema-user-builder';
 import { UserDto } from './dto/user.dto';
-import { RequestValidatorPipe } from 'src/pipes/request-validator.pipe';
-import { ResponseApiSuccess } from 'src/common/response-api';
+import { RequestValidatorPipe } from '../../pipes/request-validator.pipe';
+import { ResponseApiSuccess } from '../../common/response-api';
 import { UserService } from './services/user.service';
 import { Users } from './models/users';
-import { LoggerService } from 'src/service/logger/logger.service';
+import { LoggerService } from '../../service/logger/logger.service';
 
 const createUserSchema = new SchemaUserBuilder().createUser<Body>().options({
   abortEarly: false,
