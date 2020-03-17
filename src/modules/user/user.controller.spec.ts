@@ -19,7 +19,21 @@ describe('UserController', () => {
   
   const myFormat = winston.format.printf(({ level, message, label, timestamp }) => {
     return `${timestamp} [${label}] ${level}: ${message}`;
-  }); 
+  });
+
+  const credentials = {
+    access_token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODQ0NzE5NjQsImV4cCI6MTU4NDQ3MTk4NH0.Ebkv6yoWsMZthg-cmhyc_GKjOYVF0B53nAbrKruPkAg",
+    password:"132456789asdfAASD--1235656__ddd",
+    refresh_token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODQ0NzE5NjQsImV4cCI6MTU4NDU1ODM2NH0.R7cnFp_2AzoWmPkZCXWp6ol-08V5f6T5EzEFqxnMsZE",
+    userName:"John"
+  };
+
+  const login = {
+    access_token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODQ0NzE1OTQsImV4cCI6MTU4NDQ3MTYxNH0.QFGNPFyRgeZueXU4RHcGMDZ1UrGFConTVZ7dsQ1vrdY",
+    refresh_token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODQ0NzE1OTQsImV4cCI6MTU4NDU1Nzk5NH0.eBN9XMqd4uFguuLffRPIvZksJKOBmWLtGJ7iIQeIjJU",
+    user_id:"3cfa2dc0-6881-11ea-8bee-530bedc32d41",
+    userName:"John"
+  };
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -56,14 +70,20 @@ describe('UserController', () => {
     }).compile();
 
     userController = moduleRef.get<UserController>(UserController);
+    userService = moduleRef.get<UserService>(UserService);
   });
 
 
-  it('should return an array of users', async () => {
-    const result = usersList;
-    jest.spyOn(userService, 'getUser').mockImplementation(() => result);
-
+  it('Should return all registered users', async () => {
+    jest.spyOn(userService, 'getUser').mockImplementation(() => usersList);
     const res = (await userService.getUser()).length;
-    expect(res).toBe(result.length);
+    expect(res).toBe(usersList.length);
   });
+
+  it('Should return all registered users', async () => {
+    jest.spyOn(userService, 'loginUser').mockImplementation(() => Promise.resolve(login));
+    const res = (await userService.loginUser(credentials));
+    expect(res).toEqual(login);
+  });
+
 });

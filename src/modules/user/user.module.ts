@@ -13,7 +13,7 @@ import { TokenGeneratorMiddleware } from './middlewares/token-generator.middlewa
   imports: [SharedModule],
   controllers: [UserController],
   providers: [
-    //UserService, 
+    UserService, 
     UserDataMapper, 
     ...usersProviders,
     CryptService

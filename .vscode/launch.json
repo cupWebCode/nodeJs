@@ -8,6 +8,7 @@
       "args": [
         "${workspaceFolder}/src/main.ts"
       ],
+      "env": {"NODE_ENV":"DEV", "DB_NAME":"node_js",  "DB_HOST":"localhost",  "DB_USER":"postgres",  "DB_PASS":"superuser","DB_PORT": "3000" },
       "runtimeArgs": [
         "--nolazy",
         "-r",
