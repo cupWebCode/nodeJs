@@ -15,7 +15,7 @@ export class LoggerService {
   }));
  }
 
- error(method: string, args: any, message: string) {
+ error(method: string, args?: any, message?: string) {
   this.logger.error(JSON.stringify({
     method,
     args,
