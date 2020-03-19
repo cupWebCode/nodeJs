@@ -4,8 +4,8 @@ import { LoggerService } from '../service/logger/logger.service';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private logger: LoggerService) {}
-  catch(exception: unknown, host: ArgumentsHost) {
+  constructor(@Inject('winston') private readonly logger: Logger) {}
+  catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -15,7 +15,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : `Internal Server Error - ${HttpStatus.INTERNAL_SERVER_ERROR}`;
 
-    this.logger.error('', JSON.stringify(status), '');
+    const path = request.path;
+    this.logger.error(JSON.stringify({status, path}));
 
     response.status(status).json({
       statusCode: status,
