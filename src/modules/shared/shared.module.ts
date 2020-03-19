@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
+import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { DatabaseModule } from '../database/database.module';
-import { LoggerService } from 'src/service/logger/logger.service';
+import { LoggerService } from '../../service/logger/logger.service';
 
 const myFormat = winston.format.printf(({ level, message, label, timestamp }) => {
   return `${timestamp} [${label}] ${level}: ${message}`;

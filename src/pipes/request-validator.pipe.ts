@@ -1,10 +1,10 @@
 import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
 import { ObjectSchema, ValidationErrorItem } from '@hapi/joi';
-import { ResponseApiError } from 'src/common/response-api';
+import { ResponseApiError } from '../common/response-api';
 
 @Injectable()
 export class RequestValidatorPipe<T> implements PipeTransform<T, T> {
-  constructor(private readonly schema: ObjectSchema) { }
+  constructor(private readonly schema?: ObjectSchema) { }
 
   transform(value: T, metadata: ArgumentMetadata): T {
     const { error } = this.schema.validate(value);

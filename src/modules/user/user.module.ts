@@ -4,7 +4,7 @@ import { IdGeneratorMiddleware } from './middlewares/id-generator.middleware';
 import { UserService } from './services/user.service';
 import { usersProviders } from './providers/users.provider';
 import { UserDataMapper } from './data-access/UserDataMapper';
-import { CryptService } from 'src/service/crypt/crypt.service';
+import { CryptService } from '../../service/crypt/crypt.service';
 import { SharedModule } from '../shared/shared.module';
 import { Logger } from 'winston';
 import { TokenGeneratorMiddleware } from './middlewares/token-generator.middleware';

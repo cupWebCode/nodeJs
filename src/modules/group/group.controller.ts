@@ -1,8 +1,7 @@
 import { Controller, Post, Res, Body, HttpStatus, Headers, Get, Put, Delete, Req, Inject } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { Logger } from 'winston';
-import { ResponseApiSuccess } from 'src/common/response-api';
-import { LoggerService } from 'src/service/logger/logger.service';
+import { ResponseApiSuccess } from '../../common/response-api';
+import { LoggerService } from '../../service/logger/logger.service';
 import { GroupService } from './services/group.service';
 import { GroupDto } from './dto/group.dto';
 import { Groups } from './models/groups';
