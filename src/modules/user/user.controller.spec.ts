@@ -102,4 +102,17 @@ describe('UserController', () => {
     expect(res).toEqual(usersList[0]);
   });
 
+  it('Should edit user by id', async () => {
+    jest.spyOn(userService, 'editUser').mockImplementation(() => Promise.resolve([1, [usersList]]));//[number, Users[]]
+    const res = await userService.editUser(usersList);
+    expect(res[1][0]).toEqual(usersList);
+  });
+
+  it('Should delete user by id', async () => {
+    const userId = '9d20be9c-298c-488d-986f-3638529240dd';
+    jest.spyOn(userService, 'deleteUser').mockImplementation(() => Promise.resolve(1));
+    const res = await userService.deleteUser(userId);
+    expect(res).toEqual(1);
+  });
+
 });

@@ -82,4 +82,30 @@ describe('GroupController', () => {
     await groupService.assignUserTogroup(payload);
     expect(spy).toHaveBeenCalled();
   });
+
+  it('Should get group', async () => {
+    const groupId = '540b4520-491f-11ea-8657-b303b6508f52';
+    jest.spyOn(groupService, 'getGroup').mockImplementation(() => group);
+    const res = await groupService.getGroup(groupId);
+    expect(res).toEqual(group);
+  });
+
+  it('Should get all groups', async () => {
+    jest.spyOn(groupService, 'getAllGroup').mockImplementation(() => Promise.resolve([group]));
+    const res = await groupService.getAllGroup();
+    expect(res.length).toBe([group].length);
+  });
+
+  it('Should update group', async () => {
+    const spy = jest.spyOn(groupService, 'updateGroup').mockImplementation(() => Promise.resolve(group));
+    const res = await groupService.updateGroup(group);
+    expect(res).toEqual(group);
+  });
+
+  it('Should delete group', async () => {
+    const groupId = '540b4520-491f-11ea-8657-b303b6508f52';
+    jest.spyOn(groupService, 'deleteGroup').mockImplementation(() => Promise.resolve(1));
+    const res = await groupService.deleteGroup(groupId);
+    expect(res).toEqual(1);
+  });
 });
