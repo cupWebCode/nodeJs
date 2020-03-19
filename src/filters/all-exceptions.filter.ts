@@ -4,7 +4,7 @@ import { Logger } from 'winston';
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(@Inject('winston') private readonly logger: Logger) {}
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -14,7 +14,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : `Internal Server Error - ${HttpStatus.INTERNAL_SERVER_ERROR}`;
 
-    this.logger.error(JSON.stringify(status));
+    const path = request.path;
+    this.logger.error(JSON.stringify({status, path}));
 
     response.status(status).json({
       statusCode: status,
