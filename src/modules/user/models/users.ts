@@ -1,4 +1,4 @@
-import { Table, Column, PrimaryKey, HasOne, Model, BelongsToMany } from 'sequelize-typescript';
+import { Table, Column, PrimaryKey, HasOne, Model, BelongsToMany, AllowNull } from 'sequelize-typescript';
 import { UserProfile } from './user-profile';
 import { Groups } from 'src/modules/group/models/groups';
 import { UserGroups } from 'src/modules/group/models/user-groups';
@@ -14,6 +14,14 @@ export class Users extends Model<Users> {
 
   @Column
   password: string;
+
+  @AllowNull(true)
+  @Column
+  refresh_token: string;
+
+  @AllowNull(true)
+  @Column
+  access_token: string;
 
   @HasOne(() => UserProfile)
   user_profile: UserProfile;

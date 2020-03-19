@@ -23,17 +23,17 @@ export const databaseProviders = [
 
       await sequelize.sync({force: true}).then(() => {
         //ONLY FOR TEST REASON
-        for (let group of groupsList) {
-          Groups.upsert<Groups>(group);
-        }
+        // for (let group of groupsList) {
+        //   Groups.upsert<Groups>(group);
+        // }
 
         for (let user of usersList) {
           Users.upsert<Users>(user);
         }
 
-        for (let groupUser of groupUsersList) {
-          UserGroups.upsert<UserGroups>(groupUser);
-        }
+        // for (let groupUser of groupUsersList) {
+        //   UserGroups.upsert<UserGroups>(groupUser);
+        // }
 
         for (let profile of userProfilesList) {
           UserProfile.upsert<UserProfile>(profile);

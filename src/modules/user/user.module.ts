@@ -7,6 +7,7 @@ import { UserDataMapper } from './data-access/UserDataMapper';
 import { CryptService } from 'src/service/crypt/crypt.service';
 import { SharedModule } from '../shared/shared.module';
 import { Logger } from 'winston';
+import { TokenGeneratorMiddleware } from './middlewares/token-generator.middleware';
 
 @Module({
   imports: [SharedModule],
@@ -26,5 +27,9 @@ export class UserModule implements NestModule {
     consumer
       .apply(IdGeneratorMiddleware)
       .forRoutes({ path: 'user', method: RequestMethod.POST });
+
+      consumer
+      .apply(TokenGeneratorMiddleware)
+      .forRoutes({ path: 'user/login', method: RequestMethod.POST });
   }
 }

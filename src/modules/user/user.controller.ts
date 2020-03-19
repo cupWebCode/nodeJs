@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Get, Put, Delete, Body, Headers, Res, HttpStatus, UsePipes, HttpException, Req } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Body, Headers, Res, HttpStatus, UsePipes, Req } from '@nestjs/common';
 import { Response, Request } from 'express';
 
 import { SchemaUserBuilder } from '../../validation/schema-builder/schema-user-builder';
@@ -20,6 +20,50 @@ export class UserController {
     private loggerService: LoggerService
     ) {}
   
+  @Get(':list')
+  async getUsersList(@Headers() headers: Partial<UserDto>, @Req() req: Request, @Res() response: Response) {
+    try {
+      this.loggerService.info('getUser');
+      const result = await this.userService.getUser();
+      if (result.length) {
+        const user = result;
+        return response.json(new ResponseApiSuccess<Users[]>(true, user, null))
+          .status(HttpStatus.OK);
+      }
+      response
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+
+    } catch (e) {
+      this.loggerService.error(req.method, headers.id, e.stack);
+    }
+  }
+
+  @Post('/login')
+  async login(@Res() res: Response, @Req() req: Request, @Body() userDto: UserDto) {
+    try {
+      const credentials: Partial<UserDto> = {
+        userName: userDto.userName,
+        password: userDto.password,
+        access_token: userDto.access_token,
+        refresh_token: userDto.refresh_token
+      };
+      const result = await this.userService.loginUser(credentials)
+
+      if (result) {
+        const user = result;
+        return res.json(new ResponseApiSuccess<Partial<Users>>(true, user, null))
+          .status(HttpStatus.OK);
+      }
+      
+      res
+        .json({ message: "User was't found." })
+        .status(HttpStatus.NO_CONTENT);
+    } catch (e) {
+      this.loggerService.error(req.method, userDto, e.message);
+    }
+  }
+
   @Post()
   @UsePipes(new RequestValidatorPipe<UserDto>(createUserSchema))
   async createUser(@Res() response: Response, @Req() req: Request, @Body() userDto: UserDto) {
